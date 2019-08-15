@@ -7,6 +7,10 @@ import 'package:fluttertube/widgets/videotile.dart';
 class Home extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
+
+    //dica
+    // final VideosBloc video = BlocProvider<VideosBloc>();
+
     return Scaffold(
       appBar: AppBar(
         title: Container(
@@ -27,21 +31,24 @@ class Home extends StatelessWidget {
           IconButton(
             icon: Icon(Icons.search),
             onPressed: () async {
-              String result = await showSearch(context: context, delegate: DataSearch());
-              if(result != null) BlocProvider.of<VideosBloc>(context).inSearch.add(result);
+              String result =
+                  await showSearch(context: context, delegate: DataSearch());
+              if (result != null)
+                BlocProvider.getBloc<VideosBloc>().inSearch.add(result);
             },
           )
         ],
       ),
       body: StreamBuilder(
-        stream: BlocProvider.of<VideosBloc>(context).outVideos,
-        builder: (context, snapshot){
-          if(snapshot.hasData){
-           return ListView.builder(itemBuilder: (context, index){
-             return VideoTile(snapshot.data[index]);
-           },
-           itemCount: snapshot.data.length,
-           ); 
+        stream: BlocProvider.getBloc<VideosBloc>().outVideos,
+        builder: (context, snapshot) {
+          if (snapshot.hasData) {
+            return ListView.builder(
+              itemBuilder: (context, index) {
+                return VideoTile(snapshot.data[index]);
+              },
+              itemCount: snapshot.data.length,
+            );
           } else {
             return Container();
           }

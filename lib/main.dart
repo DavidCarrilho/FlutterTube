@@ -15,10 +15,9 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return BlocProvider(
-      bloc: VideosBloc(),
-      // bloc: [
-      //   Bloc((i) => VideosBloc()),
-      // ],
+      blocs: [
+        Bloc((i) => VideosBloc()),
+      ],
       child: MaterialApp(
         title: 'FlutterTube',
         debugShowCheckedModeBanner: false,
