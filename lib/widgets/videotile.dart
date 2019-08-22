@@ -1,4 +1,6 @@
+import 'package:bloc_pattern/bloc_pattern.dart';
 import 'package:flutter/material.dart';
+import 'package:fluttertube/blocs/favorite_bloc.dart';
 import 'package:fluttertube/models/video.dart';
 
 class VideoTile extends StatelessWidget {
@@ -8,6 +10,9 @@ class VideoTile extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    //dica Gui ... tem que ser dentro do buil da class
+    final bloc = BlocProvider.getBloc<FavoriteBloc>();
+
     return Container(
       margin: EdgeInsets.symmetric(vertical: 4),
       child: Column(
@@ -44,10 +49,27 @@ class VideoTile extends StatelessWidget {
                   ],
                 ),
               ),
-              IconButton(
-                icon: Icon(Icons.star_border, color: Colors.white),
-                iconSize: 30,
-                onPressed: () {},
+              // alterações no streamcontroller refretiram aqui
+              StreamBuilder<Map<String, Video>>(
+                stream: bloc.outFav,
+                initialData: {},
+                builder: (context, snapshot) {
+                  if (snapshot.hasData) {
+                    IconButton(
+                      icon: Icon(
+                          snapshot.data.containsKey(video.id)
+                              ? Icons.star
+                              : Icons.star_border,
+                          color: Colors.white),
+                      iconSize: 30,
+                      onPressed: () {
+                        bloc.toggleFavorite(video);
+                      },
+                    );
+                  } else {
+                    return CircularProgressIndicator();
+                  }
+                },
               )
             ],
           )
